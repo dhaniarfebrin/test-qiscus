@@ -15,7 +15,7 @@ export default {
 </script>
 
 <template>
-  <div class="container md:max-w-xl min-h-screen mx-auto border border-primary">
+  <div class="container md:max-w-xl min-h-screen mx-auto">
     <div class="flex flex-col max-h-screen overflow-y-auto relative">
       <header class="flex bg-primary p-3 px-5 sticky top-0 w-full">
         <div class="rounded-full overflow-hidden">
