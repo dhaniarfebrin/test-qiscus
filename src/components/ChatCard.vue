@@ -6,6 +6,7 @@ interface IComments {
   id: number
   type: string
   message: string
+  attachment_url?: string
   sender: string
 }
 
@@ -27,9 +28,19 @@ export default defineComponent({
       required: true
     }
   },
+  data() {
+    return {
+      hovered: false
+    }
+  },
+  methods: {
+    redirect(url: string) {
+      window.open(url, '_blank')
+    }
+  },
   computed: {
     findParticipant() {
-      return this.participants.filter((item) => item.id === this.comments.sender)
+      return this.participants.find((item) => item.id === this.comments.sender)
     }
   }
 })
@@ -53,16 +64,63 @@ export default defineComponent({
     >
       <div
         v-if="comments.sender !== 'admin@mail.com'"
-        class="flex items-center justify-between flex-wrap"
+        class="flex items-center justify-between"
         :class="{ 'flex-row-reverse': comments.sender === 'admin@mail.com' }"
       >
-        <div class="flex text-sm font-bold" v-for="item in findParticipant" :key="item.id">
-          {{ item.name }}
+        <div class="flex text-sm font-bold text-nowrap">
+          {{ findParticipant!.name ?? '' }}
         </div>
-        <div class="flex text-sm opacity-75" v-for="item in findParticipant" :key="item.id">
-          ~{{ item.id }}
+        <div class="flex text-sm opacity-75 truncate">~{{ findParticipant!.id ?? '' }}</div>
+      </div>
+
+      <!-- component attachment file -->
+      <div
+        class="w-full relative"
+        v-if="
+          comments.attachment_url &&
+          typeof comments.attachment_url == 'string' &&
+          comments.type === 'file'
+        "
+        @mouseover="hovered = true"
+        @mouseleave="hovered = false"
+      >
+        <iframe :src="comments.attachment_url" class="w-full aspect-auto rounded-md"></iframe>
+        <div
+          v-show="hovered"
+          class="absolute w-full h-full flex justify-center items-center top-0 z-20 hover:cursor-pointer bg-primary bg-opacity-30 rounded-md"
+          @click="redirect(comments.attachment_url)"
+        >
+          <button class="py-2 px-6 rounded-xl bg-primary text-white">See</button>
         </div>
       </div>
+      <!-- end of  component attachment file -->
+
+      <!-- component attachment image -->
+      <div
+        class="w-full relative"
+        v-if="
+          comments.attachment_url &&
+          typeof comments.attachment_url == 'string' &&
+          comments.type === 'image'
+        "
+        @mouseover="hovered = true"
+        @mouseleave="hovered = false"
+      >
+        <img
+          :src="comments.attachment_url"
+          alt="img-attachment "
+          class="w-full aspect-video relative z-10 rounded-md"
+        />
+        <div
+          v-show="hovered"
+          class="absolute w-full h-full flex justify-center items-center top-0 z-20 hover:cursor-pointer bg-primary bg-opacity-30 rounded-md"
+          @click="redirect(comments.attachment_url)"
+        >
+          <button class="py-2 px-6 rounded-xl bg-primary text-white">See</button>
+        </div>
+      </div>
+      <!-- end of component attachment file -->
+
       <div class="text-base">
         {{ comments.message }}
       </div>

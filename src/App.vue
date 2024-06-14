@@ -15,9 +15,9 @@ export default {
 </script>
 
 <template>
-  <div class="container md:max-w-xl min-h-screen mx-auto">
-    <div class="flex flex-col max-h-screen overflow-y-auto relative">
-      <header class="flex bg-primary p-3 px-5 sticky top-0 w-full">
+  <div class="container md:max-w-screen-md min-h-screen mx-auto">
+    <div class="flex flex-col relative">
+      <header class="flex bg-primary p-3 px-5 sticky top-0 w-full z-50">
         <div class="rounded-full overflow-hidden">
           <img
             :src="chatResponse.results.room.image_url"
@@ -37,7 +37,7 @@ export default {
           </div>
         </div>
       </header>
-      <main class="flex flex-col gap-2 my-2">
+      <main class="flex flex-col gap-2 my-2 z-0">
         <ChatCard
           v-for="item in chatResponse.results.comments"
           :key="item.id"
