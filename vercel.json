@@ -1,0 +1,4 @@
+{
+  "regions": ["sin1"],
+  "rewrites": [{ "source": "/:path*", "destination": "/index.html" }]
+}
